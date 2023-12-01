@@ -16,7 +16,6 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
-import AppBar from "@mui/material/AppBar";
 
 type SourceResponse = {
   source: String;
@@ -94,12 +93,14 @@ export default function Home() {
         noValidate
         autoComplete="off"
       >
-        <Box sx={{ padding: 0 }}>
-          <AppBar position="static" sx={{ textAlign: "right", padding: 3 }}>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              AI-SearchGenius
-            </Typography>
-          </AppBar>
+        <Box
+          sx={{
+            padding: 0,
+            textAlign: "right",
+            background: "linear-gradient(to right, #1994cc, #0a1b3a)",
+          }}
+        >
+          <img src="image.png" alt="image" height="150" />
         </Box>
         <Grid container spacing={1} sx={{ marginTop: "10px" }}>
           <Grid item xs={6}>
