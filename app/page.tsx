@@ -2,6 +2,7 @@
 import {
   Box,
   Button,
+  Checkbox,
   Grid,
   Link,
   Paper,
@@ -36,7 +37,12 @@ const ResultsTable = (props) => {
       <Table sx={{ minWidth: 650 }} aria-label="results table">
         <TableHead>
           <TableRow sx={{ background: "lightblue" }}>
-            <TableCell sx={{ fontWeight: "bold" }}>SOURCE</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }} align="center">
+              SELECT
+            </TableCell>
+            <TableCell sx={{ fontWeight: "bold" }} align="center">
+              SOURCE
+            </TableCell>
             <TableCell sx={{ fontWeight: "bold" }} align="center">
               MATCH SCORE
             </TableCell>
@@ -51,6 +57,9 @@ const ResultsTable = (props) => {
         <TableBody>
           {results.responses.map((row: any, index: number) => (
             <TableRow key={index}>
+              <TableCell align="center">
+                <Checkbox />
+              </TableCell>
               <TableCell align="center">{row.source}</TableCell>
               <TableCell align="center">{row.score}</TableCell>
               <TableCell align="left">{row.response}</TableCell>
@@ -81,6 +90,12 @@ export default function Home() {
     });
     setResults(await data.json());
   };
+
+  function generateResonse(
+    event: MouseEvent<HTMLButtonElement, MouseEvent>,
+  ): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <main>
@@ -131,15 +146,35 @@ export default function Home() {
           </Grid>
           <Grid item xs={6}>
             {results && (
-              <TextField
-                id="outlined-multiline-flexible"
-                label="Suggested response from AI:"
-                multiline
-                maxRows={20}
-                value={results.suggestedResponse}
-                style={{ width: "100%" }}
-                disabled={true}
-              />
+              <>
+                <TextField
+                  id="outlined-multiline-flexible"
+                  label="Suggested response from AI:"
+                  multiline
+                  maxRows={20}
+                  value={results.suggestedResponse}
+                  style={{ width: "100%" }}
+                  disabled={true}
+                />
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={generateResonse}
+                  // sx={{ width: "100%" }}
+                >
+                  Generate Response
+                </Button>
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={() => {
+                    navigator.clipboard.writeText(results.suggestedResponse);
+                  }}
+                  sx={{ position: "relative", float: "right" }}
+                >
+                  Copy To Clipboard
+                </Button>
+              </>
             )}
           </Grid>
           <Grid item xs={12}>
