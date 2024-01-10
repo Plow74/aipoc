@@ -122,10 +122,20 @@ export default function Home() {
     setIsLoading(false);
   };
 
-  const generateResponse = () => {
+  const generateResponse = async () => {
     const selectedResponses = checkedResponses.map((x) => x.response);
     console.log(`DEBUG ---> the selected responses are ${selectedResponses}`);
     // here is where you wil post the array of selected responses to the AI endpoint //
+    const data = await fetch("/api/combinedresponse", {
+      method: "POST",
+      headers: {
+        Accept: "application.json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ selectedResponses: selectedResponses }),
+      cache: "default",
+    });
+    setSuggestedResponse(await data.json());
   };
 
   const handleChecked = (row) => () => {
