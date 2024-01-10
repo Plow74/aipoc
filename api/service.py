@@ -7,6 +7,15 @@ from langchain.chat_models import AzureChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from json_converter.json_mapper import JsonMapper
 from flask import Flask
+from langchain.prompts import PromptTemplate
+from langchain.schema.runnable import RunnablePassthrough
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.schema.document import Document
+from langchain_openai import AzureOpenAIEmbeddings
+from langchain_openai import AzureChatOpenAI
+from langchain_community.vectorstores import FAISS
+from langchain.schema import StrOutputParser
+
 
 AZURE_OPENAI_DEPLOYMENT = "gpt-35-turbo-16k"
 
@@ -235,7 +244,42 @@ def get_openai_client():
 
     return client
     
+def get_combined_answer(responses):
+    print("\n\nIn get_combined_answer\n\n")
+       
+    allResponses = "" 
+    # allResponses = responses["selectedResponses"][0]
+    
+    for response in responses["selectedResponses"]:
+        allResponses += (response + "\n")
+        
+    vectorstore = FAISS.from_texts(
+        [allResponses], embedding=AzureOpenAIEmbeddings()
+    )
+    
+    retriever = vectorstore.as_retriever()
+
+    prompt = PromptTemplate(input_variables=['context', 'question'], template="You are an AI model tasked with providing informed responses to public inquiries based on provided contextual information. A public user has submitted a question, and your role is to analyze this question in light of the related texts provided and generate a detailed answer. Contextual Information (Related Texts): {context}\nPublic User's Question: {question}\nBased on the information provided in the related texts, formulate a comprehensive and informed response to the public user's question. Your response should integrate and reflect the insights and data present in the related texts to ensure accuracy and relevance.  Output for this response should include hypertext links to relevant resources where applicable and inserted inline with the response.")
+
+    llm = AzureChatOpenAI(
+            openai_api_version="2023-05-15",
+            azure_deployment="gpt-35-turbo-16k",
+        )
+
+    rag_chain = (
+        {"context": retriever , "question": RunnablePassthrough()}
+        | prompt
+        | llm
+        | StrOutputParser()
+    )
+
+    # return json.dumps(rag_chain.invoke("How many times does a QMS need to be identified?"))
+    return json.dumps(rag_chain.invoke(responses["question"]))
+              
+    # return """This is the combined answer!"""
+    
 def get_answer(question):
+    print("\n\nIn get_answer\n\n")
     responseJson = {
         "suggestedResponse": "",
     "responses": [

@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 import json
 import os
 
-from api.service import get_answer, get_tokens_from_question, get_jira_responses, similarity_score
+from api.service import get_answer, get_combined_answer, get_tokens_from_question, get_jira_responses, similarity_score
 
 app = Flask(__name__)
 
@@ -80,6 +80,15 @@ def get_sol_from_pr():
         set["proposedSolution"] = get_solution_from_PR(set["jira"])
 
     return result
+
+@app.route('/api/combine-answer', methods=['POST'])
+def combine_answer():
+    app.logger.warn('log entry from combine-answer')
+    print("Hello from combine-answer")
+
+    requestJson = request.get_json()
+    
+    return get_combined_answer(requestJson)
 
 @app.route('/api/answer-question', methods=['POST'])
 def answer_question():
