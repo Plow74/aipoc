@@ -16,8 +16,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
+import { ConstructionOutlined } from "@mui/icons-material";
 
 type SourceResponse = {
   source: String;
@@ -31,19 +32,8 @@ type AIResponse = {
   responses: SourceResponses;
 };
 
-const ResultsTable = (props) => {
-  // const [checked, setChecked] = useState([]);
-  const { results, setChecked, checked } = props;
-
-  // results.responses.forEach(function(response) { setChecked([...checked, false]) });
-
-  const handleChecked = id => e => {
-    console.log('id: ' + id);
-    checked[id] = !checked[id];
-    setChecked(checked);
-    // setSuggestedResponse("New response");
-    console.log('Checked: ' + checked);
-  };
+const ResultsTable = (props: { results: any; handleCheck: any }) => {
+  const { results, handleCheck } = props;
 
   return (
     <TableContainer component={Paper} style={{ paddingTop: "50px" }}>
@@ -71,12 +61,9 @@ const ResultsTable = (props) => {
           {results.responses.map((row: any, index: number) => (
             <TableRow key={index}>
               <TableCell align="center">
-              {row.source.length > 0 &&
-                <Checkbox 
-                      checked={checked[row.id]}
-                      onClick={handleChecked(row.id)}
-                />
-              }
+                {row.source.length > 0 && (
+                  <Checkbox onClick={handleCheck(row)} />
+                )}
               </TableCell>
               <TableCell align="center">{row.source}</TableCell>
               <TableCell align="center">{row.score}</TableCell>
@@ -93,16 +80,32 @@ const ResultsTable = (props) => {
 };
 
 export default function Home() {
-  const [results, setResults] = useState({ suggestedResponse:"Placeholder for the suggested response.", responses: [ {id: 0, source: "", score: "", response: "", url: "", }]  });
+  const [results, setResults] = useState({
+    suggestedResponse: "",
+    responses: [{ id: 0, source: "", score: "", response: "", url: "" }],
+  });
   const [question, setQuestion] = useState("");
   const [suggestedResponse, setSuggestedResponse] = useState("");
-  const [checked, setChecked] = useState([]);
+  const [checkedResponses, setCheckedResponses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGenerateResponseDisabled, setIsGenerateResponseDisabled] =
+    useState(false);
+
+  useEffect(() => {
+    console.log(`DEBUG ---> something was checked`);
+    if (checkedResponses.length > 0) {
+      setIsGenerateResponseDisabled(false);
+    } else {
+      setIsGenerateResponseDisabled(true);
+    }
+  }, [checkedResponses]);
 
   const handleClick = async () => {
-    const postJson = {'log':question};
-    setChecked([]);
-    setResults({ suggestedResponse:"", responses: [ {id: 0, source: "", score: "", response: "", url: "", }]  });
+    const postJson = { log: question };
+    setResults({
+      suggestedResponse: "",
+      responses: [{ id: 0, source: "", score: "", response: "", url: "" }],
+    });
     setSuggestedResponse("");
     setIsLoading(true);
 
@@ -119,11 +122,24 @@ export default function Home() {
     setIsLoading(false);
   };
 
-  function generateResonse(
-    event: MouseEvent<HTMLButtonElement, MouseEvent>,
-  ): void {
-    throw new Error("Function not implemented.");
-  }
+  const generateResponse = () => {
+    const selectedResponses = checkedResponses.map((x) => x.response);
+    console.log(`DEBUG ---> the selected responses are ${selectedResponses}`);
+    // here is where you wil post the array of selected responses to the AI endpoint //
+  };
+
+  const handleChecked = (row) => () => {
+    const responseArray = Array.from(checkedResponses);
+    const responseIndex = checkedResponses.findIndex(
+      (obj) => obj.id === row.id,
+    );
+    if (responseIndex != -1) {
+      responseArray.splice(responseIndex, 1);
+    } else {
+      responseArray.push(row);
+    }
+    setCheckedResponses(responseArray);
+  };
 
   return (
     <main>
@@ -169,11 +185,9 @@ export default function Home() {
                 >
                   Send
                 </Button>
-                <div style={{display: 'flex', justifyContent: 'center'}}>
-      {isLoading && (
-                <CircularProgress color="primary" />
-            )}
-      </div>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  {isLoading && <CircularProgress color="primary" />}
+                </div>
               </Grid>
             </Grid>
           </Grid>
@@ -192,31 +206,8 @@ export default function Home() {
                 <Button
                   variant="contained"
                   size="large"
-                  onClick={() => {
-                    console.log('Checked: ' + checked);
-                    let checkedIndex = 0;
-
-                    let i = 0;
-
-                    while (i < checked.length) {
-                        if(checked[i]) {
-                          setSuggestedResponse(results.responses[i].response);
-                          break;
-                        }
-                        i++;
-                    }
-
-                    //checked.forEach(function(checkedValue) { 
-                    //  if (checkedValue) {
-                    //    console.log('checkedIndex: ' + checkedIndex);
-                    //    setSuggestedResponse(results.responses[checkedIndex].response);
-                    //  }
-                    //  checkedIndex++;
-                    //});
-
-                    // setResults({suggestedResponse: "test", responses:[...results.responses]});
-                  }}
-                  // sx={{ width: "100%" }}
+                  onClick={generateResponse}
+                  disabled={isGenerateResponseDisabled}
                 >
                   Generate Response
                 </Button>
@@ -234,7 +225,9 @@ export default function Home() {
             )}
           </Grid>
           <Grid item xs={12}>
-            {results && <ResultsTable results={results} checked={checked} setChecked={setChecked}/>}
+            {results && (
+              <ResultsTable results={results} handleCheck={handleChecked} />
+            )}
           </Grid>
         </Grid>
       </Box>
