@@ -2,22 +2,14 @@
 import {
   Box,
   Button,
-  Checkbox,
   CircularProgress,
   Container,
-  Link,
-  Paper,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import ResultsTable from "./components/ResultsTable";
+import Question from "./components/Question";
 
 type SourceResponse = {
   source: String;
@@ -31,69 +23,12 @@ type AIResponse = {
   responses: SourceResponses;
 };
 
-const ResultsTable = (props: { results: any; handleCheck: any }) => {
-  const { results, handleCheck } = props;
-
-  return (
-    <TableContainer component={Paper} style={{ backgroundColor: "#1e1e1e" }}>
-      <Table aria-label="results table" size="small">
-        <TableHead
-          sx={{
-            "& .MuiTableCell-root": {
-              color: "white",
-            },
-          }}
-        >
-          <TableRow>
-            <TableCell align="center"></TableCell>
-            <TableCell align="center">Source</TableCell>
-            <TableCell align="center">Match</TableCell>
-            <TableCell align="left">Response</TableCell>
-            <TableCell align="left">Link</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {results.responses?.map((row: any, index: number) => (
-            <TableRow
-              key={index}
-              sx={{
-                "& .MuiTableCell-root": {
-                  color: "white",
-                },
-              }}
-            >
-              <TableCell align="center">
-                {row.source.length > 0 && (
-                  <Checkbox
-                    onClick={handleCheck(row)}
-                    sx={{
-                      color: "white",
-                      "&.Mui-checked": {
-                        color: "white",
-                      },
-                    }}
-                  />
-                )}
-              </TableCell>
-              <TableCell align="center">{row.source}</TableCell>
-              <TableCell align="center">{row.score}</TableCell>
-              <TableCell align="left">{row.response}</TableCell>
-              <TableCell align="left">
-                <Link href={row.url}>{row.url}</Link>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-};
-
 export default function Home() {
   const [results, setResults] = useState(null);
   const [question, setQuestion] = useState("");
   const [suggestedResponse, setSuggestedResponse] = useState("");
   const [checkedResponses, setCheckedResponses] = useState([]);
+  const [conversations, setConversations] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerateResponseDisabled, setIsGenerateResponseDisabled] =
     useState(false);
@@ -164,70 +99,6 @@ export default function Home() {
 
   return (
     <main>
-      {/* <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1 },
-          padding: 3,
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <Box
-          sx={{
-            padding: 0,
-            textAlign: "right",
-            background: "linear-gradient(to right, #1994cc, #0a1b3a)",
-          }}
-        >
-          <img src="image.png" alt="image" height="150" />
-        </Box>
-        <Grid container spacing={1} sx={{ marginTop: "10px" }}>
-          <Grid item xs={6}>
-            <Grid container spacing={0}>
-              <Grid item xs={12}>
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                  {isLoading && <CircularProgress color="primary" />}
-                </div>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={6}>
-            {results && (
-              <>
-                <TextField
-                  id="outlined-multiline-flexible"
-                  label="Suggested response from AI:"
-                  multiline
-                  maxRows={20}
-                  value={suggestedResponse}
-                  style={{ width: "100%" }}
-                  disabled={true}
-                />
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={generateResponse}
-                  disabled={isGenerateResponseDisabled}
-                >
-                  Generate Response
-                </Button>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={() => {
-                    navigator.clipboard.writeText(results.suggestedResponse);
-                  }}
-                  sx={{ position: "relative", float: "right" }}
-                >
-                  COPY
-                </Button>
-              </>
-            )}
-          </Grid>
-        </Grid>
-      </Box> */}
-
       <Container maxWidth="lg">
         <Box
           sx={{
@@ -250,7 +121,14 @@ export default function Home() {
                   padding: "20px",
                 }}
               >
-                <Stack direction="column" spacing={3}>
+                <Stack
+                  direction="column"
+                  spacing={3}
+                  sx={{
+                    borderLeft: 2,
+                    borderColor: "red",
+                  }}
+                >
                   <Typography
                     color={"white"}
                     sx={{ backgroundColor: "#1e1e1e", padding: "10px" }}
@@ -280,7 +158,7 @@ export default function Home() {
                     <Button
                       variant="contained"
                       onClick={generateResponse}
-                      //disabled={isGenerateResponseDisabled}
+                      disabled={isGenerateResponseDisabled}
                       sx={{
                         backgroundColor: "#7a7a7a",
                         color: "black",
@@ -320,29 +198,11 @@ export default function Home() {
                 </Stack>
               </Box>
             )}
-            <Box sx={{ alignItems: "flex-end" }}>
-              <Stack direction="row" spacing={2}>
-                <TextField
-                  id="filled-textarea"
-                  label="Ask me a question"
-                  variant="filled"
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  style={{
-                    color: "white",
-                    backgroundColor: "white",
-                    width: "90%",
-                  }}
-                />
-                <Button
-                  variant="contained"
-                  onClick={handleClick}
-                  sx={{ backgroundColor: "black" }}
-                >
-                  ENTER
-                </Button>
-              </Stack>
-            </Box>
+            <Question
+              handleClick={handleClick}
+              setQuestion={setQuestion}
+              question={question}
+            />
           </Stack>
         </Box>
       </Container>
