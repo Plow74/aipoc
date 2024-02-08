@@ -1,11 +1,30 @@
 import { Box, Stack, TextField, Button } from "@mui/material";
 
 const Question = (props: {
-  handleClick: any;
+  setResults: any;
   setQuestion: any;
+  setIsLoading: any;
   question: string;
 }) => {
-  const { handleClick, setQuestion, question } = props;
+  const { setResults, setQuestion, question, setIsLoading } = props;
+
+  const handleClick = async () => {
+    const postJson = { log: question };
+    setIsLoading(true);
+
+    const data = await fetch("http://127.0.0.1:3000/api/answerquestion", {
+      method: "POST",
+      headers: {
+        Accept: "application.json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postJson),
+      cache: "default",
+    });
+    setResults(await data.json());
+    setIsLoading(false);
+  };
+
   return (
     <Box sx={{ alignItems: "flex-end" }}>
       <Stack direction="row" spacing={2}>

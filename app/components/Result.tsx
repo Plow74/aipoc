@@ -1,22 +1,56 @@
 import { Stack, Typography, Box, Button } from "@mui/material";
 import ResultsTable from "./ResultsTable";
+import { useEffect, useState } from "react";
 
-const Result = (props: {
-  question: any;
-  results: any;
-  handleChecked: any;
-  generateResponse: any;
-  isGenerateResponseDisabled: any;
-  suggestedResponse: any;
-}) => {
-  const {
-    question,
-    results,
-    handleChecked,
-    generateResponse,
-    isGenerateResponseDisabled,
-    suggestedResponse,
-  } = props;
+const Result = (props: { question: any; results: any }) => {
+  const { question, results } = props;
+  const [isGenerateResponseDisabled, setIsGenerateResponseDisabled] =
+    useState(false);
+  const [checkedResponses, setCheckedResponses] = useState([]);
+  const [suggestedResponse, setSuggestedResponse] = useState("");
+
+  useEffect(() => {
+    console.log(`DEBUG ---> something was checked`);
+    if (checkedResponses.length > 0) {
+      setIsGenerateResponseDisabled(false);
+    } else {
+      setIsGenerateResponseDisabled(true);
+    }
+  }, [checkedResponses]);
+
+  const handleChecked = (row) => () => {
+    const responseArray = Array.from(checkedResponses);
+    const responseIndex = checkedResponses.findIndex(
+      (obj) => obj.id === row.id,
+    );
+    if (responseIndex != -1) {
+      responseArray.splice(responseIndex, 1);
+    } else {
+      responseArray.push(row);
+    }
+    setCheckedResponses(responseArray);
+  };
+
+  const generateResponse = async () => {
+    const selectedResponses = checkedResponses.map((x) => x.response);
+    console.log(`DEBUG ---> the selected responses are ${selectedResponses}`);
+    // here is where you wil post the array of selected responses to the AI endpoint //
+    const data = await fetch("http://127.0.0.1:3000/api/combinedresponse", {
+      // const data = await fetch("api/combinedresponse", {
+      method: "POST",
+      headers: {
+        Accept: "application.json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        selectedResponses: selectedResponses,
+        question: question,
+      }),
+      cache: "default",
+    });
+    setSuggestedResponse(await data.json());
+  };
+
   return (
     <Stack
       direction="column"
