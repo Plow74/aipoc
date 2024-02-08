@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import ResultsTable from "./components/ResultsTable";
 import Question from "./components/Question";
+import Result from "./components/Result";
 
 type SourceResponse = {
   source: String;
@@ -108,96 +109,30 @@ export default function Home() {
           }}
         >
           <Stack direction="column" spacing={2}>
-            {results && (
-              <Box
-                sx={{
-                  mb: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  height: 700,
-                  overflow: "hidden",
-                  overflowY: "scroll",
-                  bgcolor: "#2b2b2b",
-                  padding: "20px",
-                }}
-              >
-                <Stack
-                  direction="column"
-                  spacing={3}
-                  sx={{
-                    borderLeft: 2,
-                    borderColor: "red",
-                  }}
-                >
-                  <Typography
-                    color={"white"}
-                    sx={{ backgroundColor: "#1e1e1e", padding: "10px" }}
-                  >
-                    {question}
-                  </Typography>
-                  <Box sx={{ backgroundColor: "#1e1e1e", padding: "20px" }}>
-                    <Typography color={"white"} variant="body1" gutterBottom>
-                      I found these results for you.
-                    </Typography>
-                    <Typography color={"white"} variant="caption" gutterBottom>
-                      Please select which column(s) you would like to use to
-                      generate a resonse.
-                    </Typography>
-                    <Box
-                      sx={{
-                        paddingLeft: "50px",
-                        paddingBottom: "20px",
-                        paddingTop: "20px",
-                      }}
-                    >
-                      <ResultsTable
-                        results={results}
-                        handleCheck={handleChecked}
-                      />
-                    </Box>
-                    <Button
-                      variant="contained"
-                      onClick={generateResponse}
-                      disabled={isGenerateResponseDisabled}
-                      sx={{
-                        backgroundColor: "#7a7a7a",
-                        color: "black",
-                        position: "relative",
-                        float: "right",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Generate Response
-                    </Button>
-                  </Box>
-                  <Box sx={{ backgroundColor: "#1e1e1e", padding: "20px" }}>
-                    <Typography color={"white"} variant="body1" gutterBottom>
-                      The generated response is below.
-                    </Typography>
-                    <Typography color={"white"} variant="caption" gutterBottom>
-                      {suggestedResponse}
-                    </Typography>
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        navigator.clipboard.writeText(
-                          results.suggestedResponse,
-                        );
-                      }}
-                      sx={{
-                        backgroundColor: "#7a7a7a",
-                        color: "black",
-                        position: "relative",
-                        float: "right",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      COPY
-                    </Button>
-                  </Box>
-                </Stack>
-              </Box>
-            )}
+            <Box
+              sx={{
+                mb: 2,
+                display: "flex",
+                flexDirection: "column",
+                height: 700,
+                overflow: "hidden",
+                overflowY: "scroll",
+                bgcolor: "#2b2b2b",
+                padding: "20px",
+              }}
+            >
+              {results && (
+                <Result
+                  generateResponse={generateResponse}
+                  handleChecked={handleChecked}
+                  isGenerateResponseDisabled={isGenerateResponseDisabled}
+                  question={question}
+                  results={results}
+                  suggestedResponse={suggestedResponse}
+                />
+              )}
+            </Box>
+
             <Question
               handleClick={handleClick}
               setQuestion={setQuestion}
