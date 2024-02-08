@@ -24,6 +24,8 @@ const Result = (props: {
       sx={{
         borderLeft: 2,
         borderColor: "red",
+        paddingLeft: "10px",
+        marginBottom: "40px",
       }}
     >
       <Typography

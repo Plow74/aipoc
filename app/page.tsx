@@ -1,14 +1,6 @@
 "use client";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Container,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, CircularProgress, Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
-import ResultsTable from "./components/ResultsTable";
 import Question from "./components/Question";
 import Result from "./components/Result";
 
@@ -122,14 +114,16 @@ export default function Home() {
               }}
             >
               {results && (
-                <Result
-                  generateResponse={generateResponse}
-                  handleChecked={handleChecked}
-                  isGenerateResponseDisabled={isGenerateResponseDisabled}
-                  question={question}
-                  results={results}
-                  suggestedResponse={suggestedResponse}
-                />
+                <>
+                  <Result
+                    generateResponse={generateResponse}
+                    handleChecked={handleChecked}
+                    isGenerateResponseDisabled={isGenerateResponseDisabled}
+                    question={question}
+                    results={results}
+                    suggestedResponse={suggestedResponse}
+                  />
+                </>
               )}
             </Box>
 
