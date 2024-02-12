@@ -47,7 +47,8 @@ export default function Home() {
       <div>
         <Box
           sx={{
-            bgcolor: "#1e1e1e",
+            bgcolor: "#2b2b2b",
+            height: "100vh",
           }}
         >
           <Stack direction="column" spacing={2}>
@@ -58,7 +59,6 @@ export default function Home() {
                 flexDirection: "column",
                 height: 700,
                 overflow: "hidden",
-                bgcolor: "#2b2b2b",
               }}
             >
               <AppBar
