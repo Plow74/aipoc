@@ -26,8 +26,20 @@ const Question = (props: {
   };
 
   return (
-    <Box sx={{ alignItems: "flex-end" }}>
-      <Stack direction="row" spacing={2}>
+    <Box sx={{ 
+      bgcolor:'#1E1E1E', 
+      width:'-webkit-fill-available',
+      pt:2,  
+      pl:4, 
+      pr:4, 
+      pb:2, 
+      justifyContent:'space-between', 
+      position:'absolute', 
+      bottom: 0, 
+      flexDirection: 'row', 
+      display:'flex',
+      }}
+      >
         <TextField
           id="filled-textarea"
           label="Ask me a question"
@@ -37,17 +49,16 @@ const Question = (props: {
           style={{
             color: "white",
             backgroundColor: "white",
-            width: "90%",
+            width: '-webkit-fill-available'
           }}
         />
         <Button
           variant="contained"
           onClick={handleClick}
-          sx={{ backgroundColor: "black" }}
+          sx={{ backgroundColor: "black", width: '10vw' }}
         >
           ENTER
         </Button>
-      </Stack>
     </Box>
   );
 };
