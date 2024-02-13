@@ -57,8 +57,8 @@ const ResultsTable = (props: { results: any; handleCheck: any }) => {
               <TableCell align="center">{row.source}</TableCell>
               <TableCell align="center">{row.score}</TableCell>
               <TableCell align="left">{row.response}</TableCell>
-              <TableCell  align="left">
-                <Link style={{color:'white', fontWeight:600,}} href={row.url}>{row.url}</Link>
+              <TableCell sx={{  minWidth:'200px'}} align="left">
+                <Link style={{ overflowWrap:'anywhere', color:'white', fontWeight:600,}} href={row.url}>{row.url}</Link>
               </TableCell>
             </TableRow>
           ))}
