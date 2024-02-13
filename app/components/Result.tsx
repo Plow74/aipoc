@@ -23,7 +23,7 @@ const Result = (props: { question: any; results: any }) => {
   const handleChecked = (row) => () => {
     const responseArray = Array.from(checkedResponses);
     const responseIndex = checkedResponses.findIndex(
-      (obj) => obj.id === row.id
+      (obj) => obj.id === row.id,
     );
     if (responseIndex != -1) {
       responseArray.splice(responseIndex, 1);
@@ -80,7 +80,9 @@ const Result = (props: { question: any; results: any }) => {
         <Avatar>
           <Person2Outlined />
         </Avatar>
-        <Typography color={"white"}><strong>{question}</strong></Typography>
+        <Typography color={"white"}>
+          <strong>{question}</strong>
+        </Typography>
       </Box>
       <Box
         sx={{
@@ -127,7 +129,7 @@ const Result = (props: { question: any; results: any }) => {
             position: "relative",
             float: "right",
             fontWeight: "bold",
-            "&.Mui-disabled": { 
+            "&.Mui-disabled": {
               backgroundColor: "gray",
               color: "black",
             },
@@ -136,41 +138,43 @@ const Result = (props: { question: any; results: any }) => {
           Generate Response
         </Button>
       </Box>
-      <Box
-        sx={{
-          backgroundColor: "#1e1e1e",
-          padding: "10px",
-          borderRadius: "4px",
-          border: "1px solid black",
-          flexDirection: "row",
-          display: "flex",
-          gap: 2,
-          alignItems: "center",
-        }}
-      >
-        <Image src={AiLogo} width={40} height={40} alt="Ai Small Logo" />
-        <Box width="100%">
-          <Typography color={"white"} variant="body1" gutterBottom>
-            The generated response is below.
-          </Typography>
-          <Typography color={"white"} variant="caption" gutterBottom>
-            {suggestedResponse}
-          </Typography>
-        </Box>
-        <Button
-          variant="contained"
-          onClick={() => {
-            navigator.clipboard.writeText(results.suggestedResponse);
-          }}
+      {suggestedResponse && (
+        <Box
           sx={{
-            position: "relative",
-            float: "right",
-            fontWeight: "bold",
+            backgroundColor: "#1e1e1e",
+            padding: "10px",
+            borderRadius: "4px",
+            border: "1px solid black",
+            flexDirection: "row",
+            display: "flex",
+            gap: 2,
+            alignItems: "center",
           }}
         >
-          COPY
-        </Button>
-      </Box>
+          <Image src={AiLogo} width={40} height={40} alt="Ai Small Logo" />
+          <Box width="100%">
+            <Typography color={"white"} variant="body1" gutterBottom>
+              The generated response is below.
+            </Typography>
+            <Typography color={"white"} variant="caption" gutterBottom>
+              {suggestedResponse}
+            </Typography>
+          </Box>
+          <Button
+            variant="contained"
+            onClick={() => {
+              navigator.clipboard.writeText(results.suggestedResponse);
+            }}
+            sx={{
+              position: "relative",
+              float: "right",
+              fontWeight: "bold",
+            }}
+          >
+            COPY
+          </Button>
+        </Box>
+      )}
     </Stack>
   );
 };
