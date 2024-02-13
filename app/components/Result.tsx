@@ -1,7 +1,9 @@
-import { Stack, Typography, Box, Button } from "@mui/material";
+import { Stack, Typography, Box, Button, Avatar } from "@mui/material";
 import ResultsTable from "./ResultsTable";
 import { useEffect, useState } from "react";
-
+import { Person2Outlined } from "@mui/icons-material";
+import AiLogo from "../../public/Ai-Logo.svg";
+import Image from "next/image";
 const Result = (props: { question: any; results: any }) => {
   const { question, results } = props;
   const [isGenerateResponseDisabled, setIsGenerateResponseDisabled] =
@@ -21,7 +23,7 @@ const Result = (props: { question: any; results: any }) => {
   const handleChecked = (row) => () => {
     const responseArray = Array.from(checkedResponses);
     const responseIndex = checkedResponses.findIndex(
-      (obj) => obj.id === row.id,
+      (obj) => obj.id === row.id
     );
     if (responseIndex != -1) {
       responseArray.splice(responseIndex, 1);
@@ -57,25 +59,57 @@ const Result = (props: { question: any; results: any }) => {
       spacing={3}
       sx={{
         borderLeft: 2,
-        borderColor: "red",
+        borderColor: "grey",
         paddingLeft: "10px",
         marginBottom: "40px",
+        mt: 12,
       }}
     >
-      <Typography
-        color={"white"}
-        sx={{ backgroundColor: "#1e1e1e", padding: "10px" }}
+      <Box
+        sx={{
+          flexDirection: "row",
+          display: "flex",
+          alignItems: "center",
+          gap: 2,
+          backgroundColor: "#1e1e1e",
+          padding: "10px",
+          borderRadius: "4px",
+          border: "1px solid black",
+        }}
       >
-        {question}
-      </Typography>
-      <Box sx={{ backgroundColor: "#1e1e1e", padding: "20px" }}>
-        <Typography color={"white"} variant="body1" gutterBottom>
-          I found these results for you.
-        </Typography>
-        <Typography color={"white"} variant="caption" gutterBottom>
-          Please select which column(s) you would like to use to generate a
-          resonse.
-        </Typography>
+        <Avatar>
+          <Person2Outlined />
+        </Avatar>
+        <Typography color={"white"}><strong>{question}</strong></Typography>
+      </Box>
+      <Box
+        sx={{
+          borderRadius: "4px",
+          backgroundColor: "#1e1e1e",
+          padding: "10px",
+          border: "1px solid black",
+        }}
+      >
+        <Box
+          sx={{
+            flexDirection: "row",
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+            backgroundColor: "#1e1e1e",
+          }}
+        >
+          <Image src={AiLogo} width={40} height={40} alt="Ai Small Logo" />
+          <div>
+            <Typography color={"white"} variant="body1" gutterBottom>
+              I found these results for you.
+            </Typography>
+            <Typography color={"white"} variant="caption" gutterBottom>
+              Please select which column(s) you would like to use to generate a
+              resonse.
+            </Typography>
+          </div>
+        </Box>
         <Box
           sx={{
             paddingLeft: "50px",
@@ -90,31 +124,45 @@ const Result = (props: { question: any; results: any }) => {
           onClick={generateResponse}
           disabled={isGenerateResponseDisabled}
           sx={{
-            backgroundColor: "#7a7a7a",
-            color: "black",
             position: "relative",
             float: "right",
             fontWeight: "bold",
+            "&.Mui-disabled": { 
+              backgroundColor: "gray",
+              color: "black",
+            },
           }}
         >
           Generate Response
         </Button>
       </Box>
-      <Box sx={{ backgroundColor: "#1e1e1e", padding: "20px" }}>
-        <Typography color={"white"} variant="body1" gutterBottom>
-          The generated response is below.
-        </Typography>
-        <Typography color={"white"} variant="caption" gutterBottom>
-          {suggestedResponse}
-        </Typography>
+      <Box
+        sx={{
+          backgroundColor: "#1e1e1e",
+          padding: "10px",
+          borderRadius: "4px",
+          border: "1px solid black",
+          flexDirection: "row",
+          display: "flex",
+          gap: 2,
+          alignItems: "center",
+        }}
+      >
+        <Image src={AiLogo} width={40} height={40} alt="Ai Small Logo" />
+        <Box width="100%">
+          <Typography color={"white"} variant="body1" gutterBottom>
+            The generated response is below.
+          </Typography>
+          <Typography color={"white"} variant="caption" gutterBottom>
+            {suggestedResponse}
+          </Typography>
+        </Box>
         <Button
           variant="contained"
           onClick={() => {
             navigator.clipboard.writeText(results.suggestedResponse);
           }}
           sx={{
-            backgroundColor: "#7a7a7a",
-            color: "black",
             position: "relative",
             float: "right",
             fontWeight: "bold",
