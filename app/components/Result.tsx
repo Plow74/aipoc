@@ -1,7 +1,7 @@
 import { Stack, Typography, Box, Button, Avatar } from "@mui/material";
 import ResultsTable from "./ResultsTable";
 import { useEffect, useState } from "react";
-import { Person2Outlined } from "@mui/icons-material";
+import { Palette, Person2Outlined } from "@mui/icons-material";
 import AiLogoBlack from "../../public/Ai-Logo-Black.svg";
 
 import Image from "next/image";
@@ -78,7 +78,7 @@ const Result = (props: { question: any; results: any }) => {
           border: "1px solid black",
         }}
       >
-        <Avatar>
+        <Avatar sx={{bgcolor: '#000000'}}>
           <Person2Outlined />
         </Avatar>
         <Typography color={"white"}>
