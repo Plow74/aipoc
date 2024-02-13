@@ -73,7 +73,7 @@ export default function Home() {
                       height={30}
                       alt="Ai Small Logo"
                     />
-                    <Typography sx={{ ml: 2 }}>AI Searchgenius</Typography>
+                    <Typography sx={{ ml: 2 }}>AI SearchGenius</Typography>
                   </Toolbar>
                 </AppBar>
                 {results ? (
