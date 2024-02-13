@@ -2,7 +2,8 @@ import { Stack, Typography, Box, Button, Avatar } from "@mui/material";
 import ResultsTable from "./ResultsTable";
 import { useEffect, useState } from "react";
 import { Person2Outlined } from "@mui/icons-material";
-import AiLogo from "../../public/Ai-Logo.svg";
+import AiLogoBlack from "../../public/Ai-Logo-Black.svg";
+
 import Image from "next/image";
 const Result = (props: { question: any; results: any }) => {
   const { question, results } = props;
@@ -23,7 +24,7 @@ const Result = (props: { question: any; results: any }) => {
   const handleChecked = (row) => () => {
     const responseArray = Array.from(checkedResponses);
     const responseIndex = checkedResponses.findIndex(
-      (obj) => obj.id === row.id,
+      (obj) => obj.id === row.id
     );
     if (responseIndex != -1) {
       responseArray.splice(responseIndex, 1);
@@ -61,7 +62,7 @@ const Result = (props: { question: any; results: any }) => {
         borderLeft: 2,
         borderColor: "grey",
         paddingLeft: "10px",
-        marginBottom: "40px",
+        mb: 16,
         mt: 12,
       }}
     >
@@ -101,7 +102,7 @@ const Result = (props: { question: any; results: any }) => {
             backgroundColor: "#1e1e1e",
           }}
         >
-          <Image src={AiLogo} width={40} height={40} alt="Ai Small Logo" />
+          <Image src={AiLogoBlack} width={40} height={40} alt="Ai Small Logo" />
           <div>
             <Typography color={"white"} variant="body1" gutterBottom>
               I found these results for you.
@@ -151,7 +152,7 @@ const Result = (props: { question: any; results: any }) => {
             alignItems: "center",
           }}
         >
-          <Image src={AiLogo} width={40} height={40} alt="Ai Small Logo" />
+          <Image src={AiLogoBlack} width={40} height={40} alt="Ai Small Logo" />
           <Box width="100%">
             <Typography color={"white"} variant="body1" gutterBottom>
               The generated response is below.
