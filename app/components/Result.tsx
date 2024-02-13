@@ -149,24 +149,26 @@ const Result = (props: { question: any; results: any }) => {
             flexDirection: "row",
             display: "flex",
             gap: 2,
-            alignItems: "center",
+            alignItems: "flex-start",
           }}
         >
           <Image src={AiLogoBlack} width={40} height={40} alt="Ai Small Logo" />
           <Box width="100%">
+            <Box mr={4}>
             <Typography color={"white"} variant="body1" gutterBottom>
               The generated response is below.
             </Typography>
             <Typography color={"white"} variant="caption" gutterBottom>
               {suggestedResponse}
             </Typography>
-          </Box>
-          <Button
+            </Box>
+            <Button
             variant="contained"
             onClick={() => {
               navigator.clipboard.writeText(results.suggestedResponse);
             }}
             sx={{
+              mt:4,
               position: "relative",
               float: "right",
               fontWeight: "bold",
@@ -175,6 +177,8 @@ const Result = (props: { question: any; results: any }) => {
             COPY
           </Button>
         </Box>
+          </Box>
+         
       )}
     </Stack>
   );
