@@ -3,6 +3,7 @@ import {
   AppBar,
   Box,
   Container,
+  Skeleton,
   Stack,
   Toolbar,
   Typography,
@@ -39,8 +40,26 @@ type AIResponse = {
 
 export default function Home() {
   const [results, setResults] = useState(null);
-  const [question, setQuestion] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  let questionAsked = "";
+
+  const handleClick = async () => {
+    questionAsked = document?.getElementById("filled-textarea")?.value;
+    const postJson = { log: questionAsked };
+    setIsLoading(true);
+    setResults(null);
+    const data = await fetch("http://localhost:3000/api/answerquestion", {
+      method: "POST",
+      headers: {
+        Accept: "application.json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postJson),
+      cache: "default",
+    });
+    setResults(await data.json());
+    setIsLoading(false);
+  };
 
   return (
     <main>
@@ -76,11 +95,28 @@ export default function Home() {
                     <Typography sx={{ ml: 2 }}>AI SearchGenius</Typography>
                   </Toolbar>
                 </AppBar>
-                {results ? (
+                {isLoading && !results && (
+                  <>
+                    <Container maxWidth="lg">
+                      <Skeleton
+                        variant="rectangular"
+                        width={500}
+                        height={200}
+                      />
+                    </Container>
+                  </>
+                )}
+                {results && !isLoading && (
                   <Container maxWidth="lg">
-                    <Result question={question} results={results} />
+                    <Result
+                      results={results}
+                      question={
+                        document?.getElementById("filled-textarea")?.value
+                      }
+                    />
                   </Container>
-                ) : (
+                )}
+                {!results && !isLoading && (
                   <>
                     <Container
                       sx={{ textAlign: "center", color: "#FFF", pt: 32 }}
@@ -105,12 +141,7 @@ export default function Home() {
                     </Container>
                   </>
                 )}
-                <Question
-                  setResults={setResults}
-                  setQuestion={setQuestion}
-                  setIsLoading={setIsLoading}
-                  question={question}
-                />
+                <Question handleClick={handleClick} isDisabled={isLoading} />
               </Box>
             </Stack>
           </Box>

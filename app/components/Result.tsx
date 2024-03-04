@@ -5,8 +5,10 @@ import { Palette, Person2Outlined } from "@mui/icons-material";
 import AiLogoBlack from "../../public/Ai-Logo-Black.svg";
 
 import Image from "next/image";
-const Result = (props: { question: any; results: any }) => {
-  const { question, results } = props;
+import React from "react";
+const Result = (props: { results: any; question: string }) => {
+  const { results, question } = props;
+  const [questionAsked, setQuestionAsked] = useState(question);
   const [isGenerateResponseDisabled, setIsGenerateResponseDisabled] =
     useState(false);
   const [checkedResponses, setCheckedResponses] = useState([]);
@@ -21,10 +23,14 @@ const Result = (props: { question: any; results: any }) => {
     }
   }, [checkedResponses]);
 
-  const handleChecked = (row) => () => {
+  useEffect(() => {
+    document.getElementById("filled-textarea").value = null;
+  }, []);
+
+  const handleChecked = (row: { id: any }) => () => {
     const responseArray = Array.from(checkedResponses);
     const responseIndex = checkedResponses.findIndex(
-      (obj) => obj.id === row.id
+      (obj) => obj.id === row.id,
     );
     if (responseIndex != -1) {
       responseArray.splice(responseIndex, 1);
@@ -78,11 +84,11 @@ const Result = (props: { question: any; results: any }) => {
           border: "1px solid black",
         }}
       >
-        <Avatar sx={{bgcolor: '#000000'}}>
+        <Avatar sx={{ bgcolor: "#000000" }}>
           <Person2Outlined />
         </Avatar>
         <Typography color={"white"}>
-          <strong>{question}</strong>
+          <strong>{questionAsked}</strong>
         </Typography>
       </Box>
       <Box
@@ -155,32 +161,31 @@ const Result = (props: { question: any; results: any }) => {
           <Image src={AiLogoBlack} width={40} height={40} alt="Ai Small Logo" />
           <Box width="100%">
             <Box mr={4}>
-            <Typography color={"white"} variant="body1" gutterBottom>
-              The generated response is below.
-            </Typography>
-            <Typography color={"white"} variant="caption" gutterBottom>
-              {suggestedResponse}
-            </Typography>
+              <Typography color={"white"} variant="body1" gutterBottom>
+                The generated response is below.
+              </Typography>
+              <Typography color={"white"} variant="caption" gutterBottom>
+                {suggestedResponse}
+              </Typography>
             </Box>
             <Button
-            variant="contained"
-            onClick={() => {
-              navigator.clipboard.writeText(results.suggestedResponse);
-            }}
-            sx={{
-              mt:4,
-              position: "relative",
-              float: "right",
-              fontWeight: "bold",
-            }}
-          >
-            COPY
-          </Button>
-        </Box>
+              variant="contained"
+              onClick={() => {
+                navigator.clipboard.writeText(results.suggestedResponse);
+              }}
+              sx={{
+                mt: 4,
+                position: "relative",
+                float: "right",
+                fontWeight: "bold",
+              }}
+            >
+              COPY
+            </Button>
           </Box>
-         
+        </Box>
       )}
     </Stack>
   );
 };
-export default Result;
+export default React.forwardRef(Result);
