@@ -76,7 +76,7 @@ const Result = (props: { results: any; question: string }) => {
         sx={{
           flexDirection: "row",
           display: "flex",
-          alignItems: "center",
+          alignItems: "flex-start",
           gap: 2,
           backgroundColor: "#1e1e1e",
           padding: "10px",
@@ -113,7 +113,7 @@ const Result = (props: { results: any; question: string }) => {
             <Typography color={"white"} variant="body1" gutterBottom>
               I found these results for you.
             </Typography>
-            <Typography color={"white"} variant="caption" gutterBottom>
+            <Typography color={"white"} variant="body2" gutterBottom>
               Please select which column(s) you would like to use to generate a
               resonse.
             </Typography>
@@ -164,7 +164,7 @@ const Result = (props: { results: any; question: string }) => {
               <Typography color={"white"} variant="body1" gutterBottom>
                 The generated response is below.
               </Typography>
-              <Typography color={"white"} variant="caption" gutterBottom>
+              <Typography color={"white"} variant="body2" gutterBottom>
                 {suggestedResponse}
               </Typography>
             </Box>
