@@ -97,12 +97,50 @@ export default function Home() {
                 </AppBar>
                 {isLoading && !results && (
                   <>
-                    <Container maxWidth="lg">
-                      <Skeleton
-                        variant="rectangular"
-                        width={500}
-                        height={200}
-                      />
+                    <Container sx={{ mt: 16 }} maxWidth="lg">
+                      <Skeleton variant="rounded" width="100%" height={150}>
+                        <Box
+                          p={2}
+                          display={"flex"}
+                          gap={2}
+                          flexDirection={"row"}
+                        >
+                          <Skeleton
+                            variant="circular"
+                            width={50}
+                            height={50}
+                            animation={false}
+                            sx={{ visibility: "visible" }}
+                          ></Skeleton>
+                          <Box
+                            width="100%"
+                            display={"flex"}
+                            gap={2}
+                            flexDirection={"column"}
+                          >
+                            <Skeleton
+                              variant="rounded"
+                              height={50}
+                              animation={false}
+                              sx={{ visibility: "visible" }}
+                            ></Skeleton>
+                            <Skeleton
+                              variant="rounded"
+                              width="80%"
+                              height={20}
+                              animation={false}
+                              sx={{ visibility: "visible" }}
+                            />
+                            <Skeleton
+                              variant="rounded"
+                              width="50%"
+                              height={20}
+                              animation={false}
+                              sx={{ visibility: "visible" }}
+                            />
+                          </Box>
+                        </Box>
+                      </Skeleton>
                     </Container>
                   </>
                 )}
