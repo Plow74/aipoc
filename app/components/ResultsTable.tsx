@@ -7,6 +7,7 @@ import {
   TableCell,
   TableBody,
   Checkbox,
+  Chip,
 } from "@mui/material";
 import Link from "next/link";
 
@@ -54,7 +55,7 @@ const ResultsTable = (props: { results: any; handleCheck: any }) => {
                   />
                 )}
               </TableCell>
-              <TableCell align="center">{row.source}</TableCell>
+              <TableCell align="center"><Chip sx={{color:'#FFF'}} label={row.source} variant="outlined"/></TableCell>
               <TableCell align="center">{row.score}</TableCell>
               <TableCell align="left">{row.response}</TableCell>
               <TableCell sx={{  minWidth:'200px'}} align="left">

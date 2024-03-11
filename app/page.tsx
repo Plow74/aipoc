@@ -98,7 +98,7 @@ export default function Home() {
                 {isLoading && !results && (
                   <>
                     <Container sx={{ mt: 16 }} maxWidth="lg">
-                      <Skeleton variant="rounded" width="100%" height={150}>
+                      <Skeleton variant="rounded" width="100%" height={150} sx={{backgroundColor:"#1E1E1E", border: '1px solid #000'}}>
                         <Box
                           p={2}
                           display={"flex"}
@@ -110,7 +110,7 @@ export default function Home() {
                             width={50}
                             height={50}
                             animation={false}
-                            sx={{ visibility: "visible" }}
+                            sx={{ visibility: "visible", backgroundColor:"#000"}}
                           ></Skeleton>
                           <Box
                             width="100%"
@@ -122,21 +122,21 @@ export default function Home() {
                               variant="rounded"
                               height={50}
                               animation={false}
-                              sx={{ visibility: "visible" }}
+                              sx={{ visibility: "visible", backgroundColor:"#000" }}
                             ></Skeleton>
                             <Skeleton
                               variant="rounded"
                               width="80%"
                               height={20}
                               animation={false}
-                              sx={{ visibility: "visible" }}
+                              sx={{ visibility: "visible", backgroundColor:"#000" }}
                             />
                             <Skeleton
                               variant="rounded"
                               width="50%"
                               height={20}
                               animation={false}
-                              sx={{ visibility: "visible" }}
+                              sx={{ visibility: "visible", backgroundColor:"#000" }}
                             />
                           </Box>
                         </Box>

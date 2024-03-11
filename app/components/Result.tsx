@@ -1,7 +1,23 @@
-import { Stack, Typography, Box, Button, Avatar } from "@mui/material";
+import {
+  Stack,
+  Typography,
+  Box,
+  Button,
+  Avatar,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import ResultsTable from "./ResultsTable";
 import { useEffect, useState } from "react";
-import { Palette, Person2Outlined } from "@mui/icons-material";
+import {
+  ChatBubbleOutline,
+  CopyAll,
+  Palette,
+  Person2Outlined,
+  ThumbDownOutlined,
+  ThumbDownSharp,
+  ThumbUpSharp,
+} from "@mui/icons-material";
 import AiLogoBlack from "../../public/Ai-Logo-Black.svg";
 
 import Image from "next/image";
@@ -30,7 +46,7 @@ const Result = (props: { results: any; question: string }) => {
   const handleChecked = (row: { id: any }) => () => {
     const responseArray = Array.from(checkedResponses);
     const responseIndex = checkedResponses.findIndex(
-      (obj) => obj.id === row.id,
+      (obj) => obj.id === row.id
     );
     if (responseIndex != -1) {
       responseArray.splice(responseIndex, 1);
@@ -44,7 +60,7 @@ const Result = (props: { results: any; question: string }) => {
     const selectedResponses = checkedResponses.map((x) => x.response);
     console.log(`DEBUG ---> the selected responses are ${selectedResponses}`);
     // here is where you wil post the array of selected responses to the AI endpoint //
-    const data = await fetch("http://127.0.0.1:3000/api/combinedresponse", {
+    const data = await fetch("http://localhost:3000/api/combinedresponse", {
       // const data = await fetch("api/combinedresponse", {
       method: "POST",
       headers: {
@@ -132,6 +148,7 @@ const Result = (props: { results: any; question: string }) => {
           variant="contained"
           onClick={generateResponse}
           disabled={isGenerateResponseDisabled}
+          endIcon={<ChatBubbleOutline/>}
           sx={{
             position: "relative",
             float: "right",
@@ -168,20 +185,42 @@ const Result = (props: { results: any; question: string }) => {
                 {suggestedResponse}
               </Typography>
             </Box>
-            <Button
-              variant="contained"
-              onClick={() => {
-                navigator.clipboard.writeText(results.suggestedResponse);
-              }}
-              sx={{
-                mt: 4,
-                position: "relative",
-                float: "right",
-                fontWeight: "bold",
-              }}
+            <Box
+              mt={4}
+              display={"flex"}
+              flexDirection={"row"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
             >
-              COPY
-            </Button>
+              <Box display={"flex"} flexDirection={"row"} gap={"16px"}>
+                <Tooltip title="Like">
+                  <IconButton size="large" sx={{ border: "1px solid black" }}>
+                    <ThumbUpSharp
+                      sx={{ color: "#FFF", "&:hover": { color: "green" } }}
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Dislike">
+                  <IconButton size="large" sx={{ border: "1px solid black" }}>
+                    <ThumbDownOutlined
+                      sx={{ color: "#FFF", "&:hover": { color: "red" } }}
+                    />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+              <Button
+                variant="contained"
+                endIcon={<CopyAll />}
+                onClick={() => {
+                  navigator.clipboard.writeText(results.suggestedResponse);
+                }}
+                sx={{
+                  fontWeight: "bold",
+                }}
+              >
+                COPY
+              </Button>
+            </Box>
           </Box>
         </Box>
       )}
