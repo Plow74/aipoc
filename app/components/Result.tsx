@@ -19,6 +19,7 @@ import {
   ThumbUpSharp,
 } from "@mui/icons-material";
 import AiLogoBlack from "../../public/Ai-Logo-Black.svg";
+import FeedbackModal from './FeedbackModal'; // Import the FeedbackModal component
 
 import Image from "next/image";
 import React from "react";
@@ -29,6 +30,36 @@ const Result = (props: { results: any; question: string }) => {
     useState(false);
   const [checkedResponses, setCheckedResponses] = useState([]);
   const [suggestedResponse, setSuggestedResponse] = useState("");
+  const [likeModalOpen, setLikeModalOpen] = useState(false);
+  const [dislikeModalOpen, setDislikeModalOpen] = useState(false);
+
+  const handleLikeClick = () => {
+    setLikeModalOpen(true);
+  };
+
+  const handleDislikeClick = () => {
+    setDislikeModalOpen(true);
+  };
+
+  const handleLikeModalClose = () => {
+    setLikeModalOpen(false);
+  };
+
+  const handleDislikeModalClose = () => {
+    setDislikeModalOpen(false);
+  };
+
+  const handleLikeSubmit = (feedback) => {
+    // Handle like feedback submission
+    console.log('Like feedback submitted:', feedback);
+    handleLikeModalClose();
+  };
+
+  const handleDislikeSubmit = (feedback) => {
+    // Handle dislike feedback submission
+    console.log('Dislike feedback submitted:', feedback);
+    handleDislikeModalClose();
+  };
 
   useEffect(() => {
     console.log(`DEBUG ---> something was checked`);
@@ -194,19 +225,31 @@ const Result = (props: { results: any; question: string }) => {
             >
               <Box display={"flex"} flexDirection={"row"} gap={"16px"}>
                 <Tooltip title="Like">
-                  <IconButton size="large" sx={{ border: "1px solid black" }}>
+                  <IconButton size="large" sx={{ border: "1px solid black" }} onClick={handleLikeClick}>
                     <ThumbUpSharp
                       sx={{ color: "#FFF", "&:hover": { color: "green" } }}
                     />
                   </IconButton>
                 </Tooltip>
+                <FeedbackModal
+                  open={likeModalOpen}
+                  onClose={handleLikeModalClose}
+                  onSubmit={handleLikeSubmit}
+                  title="Glad you like the response, give us feedback!"
+                />
                 <Tooltip title="Dislike">
-                  <IconButton size="large" sx={{ border: "1px solid black" }}>
+                  <IconButton size="large" sx={{ border: "1px solid black" }} onClick={handleDislikeClick}>
                     <ThumbDownOutlined
                       sx={{ color: "#FFF", "&:hover": { color: "red" } }}
                     />
                   </IconButton>
                 </Tooltip>
+                <FeedbackModal
+                  open={dislikeModalOpen}
+                  onClose={handleDislikeModalClose}
+                  onSubmit={handleDislikeSubmit}
+                  title="Sorry you dislike the response, give us feedback to improve."
+                />
               </Box>
               <Button
                 variant="contained"
